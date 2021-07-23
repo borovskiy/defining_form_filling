@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+</head>
+<body>
+<form action="" method="post">
+    <button type="submit">Пост</button>
+</form>
+
+{% if data %}
+    {% for object, val in data.items() %}
+    <p>
+        {{object}}<br>
+        {{val}}<br>
+    </p>
+    {% endfor %}
+{% endif %}
+</body>
+</html>

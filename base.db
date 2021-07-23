@@ -1,0 +1,20 @@
+{"_default":
+    {
+        "1":
+            {"name": "Form template name", "field_name_1": "email", "field_name_2": "phone"},
+        "2":
+            {"name": "Form template name2", "field_name_1": "string", "field_name_2": "string", "field_name_3": "string", "field_name_4": "phone", "field_name_5": "email", "field_name_6": "date" },
+        "3":
+            {"name": "Form template name3", "field_name_1": "email", "field_name_2": "phone", "field_name_3": "string"},
+        "4":
+            {"name": "Form template name4", "field_name_1": "string", "field_name_2": "phone", "field_name_3": "phone"},
+        "5":
+            {"name": "Form template name5", "field_name_1": "email", "field_name_2": "date"},
+        "6":
+            {"name": "Form template name6", "field_name_1": "string", "field_name_2": "date", "field_name_3": "date"},
+        "7":
+            {"name": "Form template name7", "field_name_1": "email", "field_name_2": "date", "field_name_3": "phone"},
+        "8":
+            {"name": "Form template name8", "field_name_2": "phone", "field_name_3": "phone"}
+    }
+}
