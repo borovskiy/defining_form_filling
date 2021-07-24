@@ -9,8 +9,12 @@ db = TinyDB('base.db')
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
-        list_name = list_name_template(db=db, request_args=request.args)
-        return render_template('index.html', data=list_name)
+        if bool(request.args):
+            data = request.args
+        else:
+            data = request.form
+        list_name = list_name_template(db=db.all(), request_args=data)
+        return list_name
 
     if request.method == 'GET':
         return render_template('index.html')

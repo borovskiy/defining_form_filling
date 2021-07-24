@@ -3,13 +3,13 @@ import datetime
 
 def telephone_check(enter_string_data: str) -> bool:
     """функция проверки числа на принадлежность к номеру телефона"""
-    if enter_string_data[0:2] == " 7":
-        new_string = enter_string_data[2:]
-    elif enter_string_data[0] == '8':
-        new_string = enter_string_data[1:]
+    if enter_string_data[0] == '8':
+        truncated_number = enter_string_data[1:]
+    elif enter_string_data[0:2] == '7' or '+7':
+        truncated_number = enter_string_data[1:]
     else:
         return False
-    if len(new_string) == 10 and new_string.isdigit():
+    if truncated_number.isdigit():
         return True
     else:
         return False
@@ -18,14 +18,15 @@ def telephone_check(enter_string_data: str) -> bool:
 def date_check(enter_string_date: str) -> bool:
     """Функция проверки даты на валидность"""
     try:
-        if enter_string_date[:6].count('.') == 2:
-            datetime.datetime.strptime(enter_string_date, '%d.%m.%Y')
-            return True
-        elif enter_string_date[:6].count('.') == 1:
-            datetime.datetime.strptime(enter_string_date, '%Y.%m.%d')
-            return True
-        else:
-            return False
+        if len(enter_string_date) == 10 and enter_string_date.count('.') == 2:
+            if enter_string_date[:6].count('.') == 2:
+                datetime.datetime.strptime(enter_string_date, '%d.%m.%Y')
+                return True
+            elif enter_string_date[:6].count('.') == 1:
+                datetime.datetime.strptime(enter_string_date, '%Y.%m.%d')
+                return True
+            else:
+                return False
     except ValueError:
         return False
 
@@ -59,23 +60,23 @@ def counting_field_types(dict_request_args):
 
 def list_name_template(db, request_args) -> dict:
     """Функция создания словаря в зависимости от обработки данных"""
+    request_args = dict(request_args)
     list_name_templates = []
-    dict_data_fields = counting_field_types(request_args)
+    dict_data_post_fields = counting_field_types(request_args)
     for i in db:
         email_count_in_db = list(i.values()).count('email')
         phone_count_in_db = list(i.values()).count('phone')
         date_count__in_db = list(i.values()).count('date')
         string_count_in_db = list(i.values()).count('string')
 
-        if dict_data_fields['email'] >= email_count_in_db and \
-                dict_data_fields['phone'] >= phone_count_in_db and \
-                dict_data_fields['date'] >= date_count__in_db and \
-                dict_data_fields['string'] >= string_count_in_db:
-
+        if dict_data_post_fields['email'] >= email_count_in_db and \
+                dict_data_post_fields['phone'] >= phone_count_in_db and \
+                dict_data_post_fields['date'] >= date_count__in_db and \
+                dict_data_post_fields['string'] >= string_count_in_db:
             list_name_templates.append(i['name'])
     list_name_templates = dict(enumerate(list_name_templates))
     if len(list_name_templates) <= 0:
         list_name_templates = dict(request_args)
-        for key in list_name_templates.keys():
-            list_name_templates.update({key: 'FIELD_TYPE'})
+        for key, value in list_name_templates.items():
+            list_name_templates.update({key: {value: check_data(value)}})
     return list_name_templates
