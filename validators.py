@@ -5,7 +5,7 @@ def telephone_check(enter_string_data: str) -> bool:
     """функция проверки числа на принадлежность к номеру телефона"""
     if enter_string_data[0] == '8':
         truncated_number = enter_string_data[1:]
-    elif enter_string_data[0:2] == '7' or '+7':
+    elif enter_string_data[0:2].strip() in ['7', '+7']:
         truncated_number = enter_string_data[1:]
     else:
         return False
@@ -20,7 +20,6 @@ def validate_email(string: str) -> bool:
     string_after_dog = string.split('@')[-1].replace('.' + string_after_point, '')
     if string_after_point.isalpha() and string_after_dog.isalpha():
         name_email = string.split('@')[0]
-        print(name_email[0], name_email[-1])
         if name_email.find('._-') == -1 and name_email[-1] not in ['.', '-', '_', ] and name_email[0] not in ['.', '-',
                                                                                                               '_', ]:
             return True
