@@ -15,6 +15,18 @@ def telephone_check(enter_string_data: str) -> bool:
         return False
 
 
+def validate_email(string: str) -> bool:
+    string_after_point = string.split('.')[-1]
+    string_after_dog = string.split('@')[-1].replace('.' + string_after_point, '')
+    if string_after_point.isalpha() and string_after_dog.isalpha():
+        name_email = string.split('@')[0]
+        print(name_email[0], name_email[-1])
+        if name_email.find('._-') == -1 and name_email[-1] not in ['.', '-', '_', ] and name_email[0] not in ['.', '-',
+                                                                                                              '_', ]:
+            return True
+    return False
+
+
 def date_check(enter_string_date: str) -> bool:
     """Функция проверки даты на валидность"""
     try:
@@ -36,7 +48,7 @@ def check_data(value_data: str) -> str:
         return 'date'
     elif telephone_check(value_data):
         return 'phone'
-    elif '.' and '@' in value_data:
+    elif '.' and '@' in value_data and validate_email(value_data):
         return 'email'
     else:
         return 'string'
@@ -61,22 +73,31 @@ def counting_field_types(dict_request_args):
 def list_name_template(db, request_args) -> dict:
     """Функция создания словаря в зависимости от обработки данных"""
     request_args = dict(request_args)
-    list_name_templates = []
+    dict_name_templates = {}
     dict_data_post_fields = counting_field_types(request_args)
-    for i in db:
-        email_count_in_db = list(i.values()).count('email')
-        phone_count_in_db = list(i.values()).count('phone')
-        date_count__in_db = list(i.values()).count('date')
-        string_count_in_db = list(i.values()).count('string')
+    for template in db:
+        email_count_in_db = list(template.values()).count('email')
+        phone_count_in_db = list(template.values()).count('phone')
+        date_count__in_db = list(template.values()).count('date')
+        string_count_in_db = list(template.values()).count('string')
 
         if dict_data_post_fields['email'] >= email_count_in_db and \
                 dict_data_post_fields['phone'] >= phone_count_in_db and \
                 dict_data_post_fields['date'] >= date_count__in_db and \
                 dict_data_post_fields['string'] >= string_count_in_db:
-            list_name_templates.append(i['name'])
-    list_name_templates = dict(enumerate(list_name_templates))
-    if len(list_name_templates) <= 0:
-        list_name_templates = dict(request_args)
-        for key, value in list_name_templates.items():
-            list_name_templates.update({key: {value: check_data(value)}})
-    return list_name_templates
+            dict_name_templates.update({template['name']: template})
+    if len(dict_name_templates) <= 0:
+        dict_name_templates = request_args
+        for key, value in dict_name_templates.items():
+            dict_name_templates.update({key: {value: check_data(value)}})
+        return dict_name_templates
+    else:
+        return max_len_template(dict_name_templates)
+
+
+def max_len_template(dicts):
+    max_len_templates = {}
+    for values in dicts.values():
+        if len(values) > len(max_len_templates):
+            max_len_templates = values
+    return max_len_templates['name']

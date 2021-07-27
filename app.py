@@ -1,23 +1,18 @@
 from validators import list_name_template
-from flask import Flask, render_template, request
+from flask import Flask, request
 from tinydb import TinyDB
 
 app = Flask(__name__)
 db = TinyDB('base.db')
 
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/get_form', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
-        if bool(request.args):
-            data = request.args
-        else:
-            data = request.form
-        list_name = list_name_template(db=db.all(), request_args=data)
-        return list_name
-
-    if request.method == 'GET':
-        return render_template('index.html')
+        if request.args:
+            list_name = list_name_template(db=db.all(), request_args=request.args)
+            return list_name
+        return None
 
 
 if __name__ == '__main__':
