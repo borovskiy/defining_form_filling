@@ -6,15 +6,14 @@ app = Flask(__name__)
 db = TinyDB('base.db')
 
 
-@app.route('/get_form', methods=['POST', 'GET'])
+@app.route('/get_form', methods=['POST'])
 def index():
     if request.method == 'POST':
         if request.args:
             list_name = list_name_template(db=db.all(), request_args=request.args)
             return list_name
-        return None
-    if request.method == 'GET':
-        return 'Hello'
+        return 'None'
+
 
 if __name__ == '__main__':
     app.run(debug=True)

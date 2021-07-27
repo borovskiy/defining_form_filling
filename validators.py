@@ -69,7 +69,7 @@ def counting_field_types(dict_request_args):
     return dict_count_data
 
 
-def list_name_template(db, request_args) -> dict:
+def list_name_template(db, request_args) -> dict or str:
     """Функция создания словаря в зависимости от обработки данных"""
     request_args = dict(request_args)
     dict_name_templates = {}
@@ -94,7 +94,8 @@ def list_name_template(db, request_args) -> dict:
         return max_len_template(dict_name_templates)
 
 
-def max_len_template(dicts):
+def max_len_template(dicts: dict) -> str:
+    """Функция для отбора самой большой из совпавших форм"""
     max_len_templates = {}
     for values in dicts.values():
         if len(values) > len(max_len_templates):
